@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { OnePlayerGame } = require("../../src/services/games");
+const { OnePlayerGame } = require("../../../src/services/games");
 
 describe("OnePlayerGame", () => {
     let game;
