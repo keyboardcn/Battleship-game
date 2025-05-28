@@ -158,7 +158,7 @@ export default function BattleshipUI() {
         </>
       )}
 
-      <Grid container spacing={2} sx={{ mt: 2 }}>
+      <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid item>
           <TextField
             label="Row"
@@ -177,10 +177,13 @@ export default function BattleshipUI() {
         </Grid>
         <Grid item>
           <Button variant="outlined" onClick={handleShoot}>
-            Shoot
+            Let's Shoot
           </Button>
         </Grid>
-        <Grid item>
+
+      </Grid>
+      <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
+        <Grid visibility={boards.length > 0 ? "visible" : "hidden"}>
           <Button variant="outlined" onClick={() => setStatsDialog(true)}>
             Show Game Stats
           </Button>
