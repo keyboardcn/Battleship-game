@@ -68,3 +68,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+## pre-requisite
+npm 10.9.2
+
+## project setup
+
+## unit test for battleship-engin
+```bash
+npx mocha tests/battleship-engine/board.test.js
+```
+or
+```bash
+npm run test
+```
