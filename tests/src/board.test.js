@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { Board } = require("../../src/board");
+const { Board } = require("../../src/services/board");
 
 describe("Board", () => {
   let game;
