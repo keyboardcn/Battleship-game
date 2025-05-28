@@ -104,7 +104,7 @@ export default function BattleshipUI() {
   };
 
   return (
-    <Container sx={{ mt: 4 }} justifyContent="center" alignItems="center">
+    <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>
@@ -229,5 +229,6 @@ export default function BattleshipUI() {
         </DialogActions>
       </Dialog>
     </Container>
+    
   );
 }
