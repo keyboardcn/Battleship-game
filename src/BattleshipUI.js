@@ -13,10 +13,10 @@ import {
   Paper,
   Select,
 } from "@mui/material";
-import { OnePlayerGame, TwoPlayerGame } from "./games";
+import { OnePlayerGame, TwoPlayerGame } from "./services/games";
 
 const createEmptyBoard = (rows, cols) => Array.from({ length: rows }, () => Array(cols).fill("-"));
-
+const seen = [];
 
 function GameBoard({ board }) {
   const numRows = board.length;
@@ -59,7 +59,7 @@ export default function BattleshipUI() {
   const [winDialog, setWinDialog] = useState(false);
   const [statsDialog, setStatsDialog] = useState(false);
   const [winnerBoards, setWinnerBoards] = useState([]);
-  const [seen, setSeen] = useState([]);
+
 
 
   const startGame = () => {
@@ -83,13 +83,14 @@ export default function BattleshipUI() {
     if (!game || rowInput === "" || colInput === "") return;
     const row = parseInt(rowInput);
     const col = parseInt(colInput);
-    console.log(seen.has([row,col]), seen);
-    if (seen.has([row, col]) || row < 0 || row >= rows || col < 0 || col >= cols) {
-      setStatus("Invalid shot or already shot here!");
+    const marker = `${row}-${col}`;
+    console.log(seen.includes(marker), seen);
+    if (seen.includes(marker) || row < 0 || row >= rows || col < 0 || col >= cols) {
+      setStatus("❌Invalid shot or already shot here!");
       return;
     }
     const result = game.alternativeShoot(row, col);
-    seen.add([row,col]);
+    seen.push(marker);
     const newBoards = mode === "1P" 
       ? [game.player.board.board] 
       : [game.player1.board.board, game.player2.board.board];
@@ -103,18 +104,21 @@ export default function BattleshipUI() {
   };
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={{ mt: 4 }} justifyContent="center" alignItems="center">
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>
 
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
         <Grid item>
           <Select value={mode} onChange={(e) => setMode(e.target.value)} displayEmpty>
             <MenuItem value="1P">One Player</MenuItem>
             <MenuItem value="2P">Two Players</MenuItem>
           </Select>
         </Grid>
+      </Grid>
+
+      <Grid container spacing={2} alignItems="center">
         <Grid item>
           <TextField
             type="number"
