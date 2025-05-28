@@ -96,7 +96,7 @@ export default function BattleshipUI() {
       : [game.player1.board.board, game.player2.board.board];
     setBoards([...newBoards]);
     setStatus(result.hit ? `🔥 ${result.shooter} hit!` : `❌ ${result.shooter} missed!`);
-    if (result.win) {
+    if (result.winner) {
       setWinnerBoards([...newBoards]);
       setWinDialog(true);
     }
