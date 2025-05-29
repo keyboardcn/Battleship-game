@@ -43,35 +43,37 @@ export class Board {
   }
 
   shoot(row, col) {
+
     let hit = false;
     let shipSunk = false;
-
-    if (this.board[row][col] === "S") {
-      this.board[row][col] = "X";
+    const newBoard = this.board.map(r => [...r]);
+    
+    if (newBoard[row][col] === "S") {
+      newBoard[row][col] = "X";
       this.hits++;
       hit = true;
-    } else if (this.board[row][col] === "-") {
-      this.board[row][col] = "O";
+    } else if (newBoard[row][col] === "-") {
+      newBoard[row][col] = "O";
       this.misses++;
     }
 
     for (let i = 0; i < this.ships.length; i++) {
       let ship = this.ships[i];
-      if (ship.every(([r, c]) => this.board[r][c] === "X")) {
+      if (ship.every(([r, c]) => newBoard[r][c] === "X")) {
         shipSunk = true;
         this.ships.splice(i, 1);
         this.remainingShips--;
         break;
       }
     }
-
+    this.board = newBoard.map(row => [...row]);
     return {
       hit,
       misses: this.misses,
       hits: this.hits,
       remainingShips: this.remainingShips,
       ships: this.ships,
-      board: this.board.map(row => [...row])
+      board: newBoard.map(row => [...row])
     };
   }
 }

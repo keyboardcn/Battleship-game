@@ -76,6 +76,8 @@ export class OnePlayerGame extends AbstractGame {
   }
 
   alternativeShoot(row, col) {
+    console.log(`Shooting at (${row}, ${col}) for player ${this.player.name}`);
+    
     if (this.winner) return { winner: this.player.name };
 
     const result = this.player.board.shoot(row, col);
