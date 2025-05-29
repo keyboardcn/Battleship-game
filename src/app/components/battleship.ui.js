@@ -67,7 +67,7 @@ export default function BattleshipUI() {
       </Typography>
 
       <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
-        <Grid item>
+        <Grid>
           <Select value={mode} onChange={(e) => dispatch(setGameMode(e.target.value))} displayEmpty>
             <MenuItem value="1P">One Player</MenuItem>
             <MenuItem value="2P">Two Players</MenuItem>
@@ -76,7 +76,7 @@ export default function BattleshipUI() {
       </Grid>
 
       <Grid container spacing={2} alignItems="center">
-        <Grid item>
+        <Grid>
           <TextField
             type="number"
             label="Rows"
@@ -84,7 +84,7 @@ export default function BattleshipUI() {
             onChange={(e) => dispatch(setBoardSize({ rows: parseInt(e.target.value), cols }))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <TextField
             type="number"
             label="Cols"
@@ -92,7 +92,7 @@ export default function BattleshipUI() {
             onChange={(e) => dispatch(setBoardSize({ rows, cols: parseInt(e.target.value) }))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <Button variant="contained" onClick={handleStartGame}>
             Start Game
           </Button>
@@ -106,7 +106,7 @@ export default function BattleshipUI() {
           </Typography>
           <Grid container spacing={2}>
             {boards.map((b, idx) => (
-              <Grid item xs={6} key={idx}>
+              <Grid key={idx}>
                 <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
                 <GameBoard board={b} />
               </Grid>
@@ -116,7 +116,7 @@ export default function BattleshipUI() {
       )}
 
       <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
-        <Grid item>
+        <Grid>
           <TextField
             label="Row"
             type="number"
@@ -124,7 +124,7 @@ export default function BattleshipUI() {
             onChange={(e) => setRowInput(Math.min(rows-1, parseInt(e.target.value)))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <TextField
             label="Col"
             type="number"
@@ -132,14 +132,14 @@ export default function BattleshipUI() {
             onChange={(e) => setColInput(Math.min(cols-1, parseInt(e.target.value)))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <Button variant="outlined" onClick={handleShoot}>
             Let's Shoot
           </Button>
         </Grid>
 
       </Grid>
-      <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
+      <Grid container spacing={2}  visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid visibility={boards.length > 0 ? "visible" : "hidden"}>
           <Button variant="outlined" onClick={handleOpenStatsDialog}>
             Show Game Stats
