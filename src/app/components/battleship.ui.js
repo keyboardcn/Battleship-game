@@ -101,10 +101,10 @@ export default function BattleshipUI() {
 
       {boards.length > 0 && (
         <>
-          <Typography variant="h6" sx={{ mt: 3 }}>
+          <Typography variant="h6" sx={{ mt: 2 }}>
             Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} justifyContent={"center"}>
             {boards.map((b, idx) => (
               <Grid key={idx}>
                 <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>

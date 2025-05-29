@@ -6,6 +6,10 @@ const store = configureStore({
   reducer: {
     game: gameReducer, // Assign the gameReducer to the 'game' slice of your state
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable serializable check if needed
+    }),
   // Middleware can be added here. Redux Toolkit includes Redux Thunk by default.
   // devTools: process.env.NODE_ENV !== 'production', // Enable Redux DevTools in development
 });
