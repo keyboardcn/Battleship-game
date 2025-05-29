@@ -13,7 +13,7 @@ import {
 import { GameBoard } from "./game.board";
 import { WinDialog } from "./win.dialog";
 import { StatusDialog } from "./status.dialog";
-import thImage from "../../assets/th.png";
+import thImage from "../../assets/battleship.gif";
 
 import {
   setBoardSize,
@@ -21,7 +21,6 @@ import {
   startGame,
   processShoot,
   openStatsDialog,
-  closeStatsDialog,
 } from '../redux/gameSlice';
 
 
@@ -31,11 +30,9 @@ export default function BattleshipUI() {
     rows,
     cols,
     mode,
-    gameInstance, // The game object itself
     playerTurn,
     boards,
     statusMessage,
-    statsDialogOpen,
   } = useSelector((state) => state.game);
 
   const [rowInput, setRowInput] = useState("");
@@ -61,7 +58,7 @@ export default function BattleshipUI() {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
-      <img src={thImage} alt="Battleship Logo" />
+      <img src={thImage} alt="Battleship Logo" width="100%" />
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>
@@ -104,7 +101,7 @@ export default function BattleshipUI() {
           <Typography variant="h6" sx={{ mt: 2 }}>
             Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
           </Typography>
-          <Grid container spacing={2} justifyContent={"center"}>
+          <Grid container spacing={2} justifyContent={"space-evenly"} >
             {boards.map((b, idx) => (
               <Grid key={idx}>
                 <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
