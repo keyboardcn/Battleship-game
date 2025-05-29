@@ -12,10 +12,10 @@ export function GameBoard({ board }) {
     <Paper elevation={3} sx={{ p: 2 }}>
       <Grid container direction="column" spacing={0.5}>
         {Array.from({ length: numRows }).map((_, rowIndex) => (
-          <Grid item key={rowIndex}>
+          <Grid key={rowIndex}>
             <Grid container spacing={0.5}>
               {Array.from({ length: numCols }).map((_, colIndex) => (
-                <Grid item key={colIndex}>
+                <Grid key={colIndex}>
                   <Paper sx={{ width: 30, height: 30, textAlign: "center", lineHeight: "30px" }}>
                     {board[rowIndex][colIndex] === "-" ? ""
                       : board[rowIndex][colIndex] === "X" ? "💥"

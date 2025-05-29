@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React from 'react';
+import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Button,
@@ -6,74 +8,55 @@ import {
   Grid,
   Typography,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Select,
 } from "@mui/material";
-import { OnePlayerGame, TwoPlayerGame } from "../services/games";
 import { GameBoard } from "./game.board";
+import { WinDialog } from "./win.dialog";
+import { StatusDialog } from "./status.dialog";
 import thImage from "../../assets/th.png";
-const createEmptyBoard = (rows, cols) => Array.from({ length: rows }, () => Array(cols).fill("-"));
-const seen = [];
+
+import {
+  setBoardSize,
+  setGameMode,
+  startGame,
+  processShoot,
+  openStatsDialog,
+  closeStatsDialog,
+} from '../redux/gameSlice';
 
 
 export default function BattleshipUI() {
-  const [rows, setRows] = useState(10);
-  const [cols, setCols] = useState(10);
-  const [mode, setMode] = useState("1P");
-  const [game, setGame] = useState(null);
-  const [playerTurn, setPlayerTurn] = useState(0);
-  const [boards, setBoards] = useState([]);
+  const dispatch = useDispatch();
+  const {
+    rows,
+    cols,
+    mode,
+    gameInstance, // The game object itself
+    playerTurn,
+    boards,
+    statusMessage,
+    statsDialogOpen,
+  } = useSelector((state) => state.game);
+
   const [rowInput, setRowInput] = useState("");
   const [colInput, setColInput] = useState("");
-  const [status, setStatus] = useState("");
-  const [winDialog, setWinDialog] = useState(false);
-  const [statsDialog, setStatsDialog] = useState(false);
-  const [winnerBoards, setWinnerBoards] = useState([]);
 
 
-
-  const startGame = () => {
-    let newGame;
-    if (mode === "1P") {
-      newGame = new OnePlayerGame("Player1", rows, cols);
-    } else {
-      newGame = new TwoPlayerGame("Player1", "Player2", rows, cols);
-    }
-    setGame(newGame);
-    console.log("Game started:", newGame);
-    setBoards(mode === "1P" 
-      ? [newGame.player.board.board] 
-      : [newGame.player1.board.board, newGame.player2.board.board]);
-    setPlayerTurn(0);
-    setStatus("");
-    setWinnerBoards([]);
+  const handleStartGame = () => {
+    dispatch(startGame()); // Dispatch the startGame action to initialize the game}));
+    setRowInput(""); // Clear input fields after shot
+    setColInput("");
   };
 
   const handleShoot = () => {
-    if (!game || rowInput === "" || colInput === "") return;
-    const row = parseInt(rowInput);
-    const col = parseInt(colInput);
-    const marker = `${row}-${col}`;
-    console.log(seen.includes(marker), seen);
-    if (seen.includes(marker) || row < 0 || row >= rows || col < 0 || col >= cols) {
-      setStatus("❌Invalid shot or already shot here!");
-      return;
-    }
-    const result = game.alternativeShoot(row, col);
-    seen.push(marker);
-    const newBoards = mode === "1P" 
-      ? [game.player.board.board] 
-      : [game.player1.board.board, game.player2.board.board];
-    setBoards([...newBoards]);
-    setStatus(result.hit ? `🔥 ${result.shooter} hit!` : `❌ ${result.shooter} missed!`);
-    if (result.winner) {
-      setWinnerBoards([...newBoards]);
-      setWinDialog(true);
-    }
-    setPlayerTurn(mode === "2P" ? (playerTurn === 0 ? 1 : 0) : 0);
+    // Dispatch the processShoot action with row and col as payload
+    dispatch(processShoot({ row: parseInt(rowInput), col: parseInt(colInput) }));
+    setRowInput(""); // Clear input fields after shot
+    setColInput("");
+  };
+
+  const handleOpenStatsDialog = () => {
+    dispatch(openStatsDialog());
   };
 
   return (
@@ -84,8 +67,8 @@ export default function BattleshipUI() {
       </Typography>
 
       <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
-        <Grid item>
-          <Select value={mode} onChange={(e) => setMode(e.target.value)} displayEmpty>
+        <Grid>
+          <Select value={mode} onChange={(e) => dispatch(setGameMode(e.target.value))} displayEmpty>
             <MenuItem value="1P">One Player</MenuItem>
             <MenuItem value="2P">Two Players</MenuItem>
           </Select>
@@ -93,24 +76,24 @@ export default function BattleshipUI() {
       </Grid>
 
       <Grid container spacing={2} alignItems="center">
-        <Grid item>
+        <Grid>
           <TextField
             type="number"
             label="Rows"
             value={rows}
-            onChange={(e) => setRows(parseInt(e.target.value))}
+            onChange={(e) => dispatch(setBoardSize({ rows: parseInt(e.target.value), cols }))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <TextField
             type="number"
             label="Cols"
             value={cols}
-            onChange={(e) => setCols(parseInt(e.target.value))}
+            onChange={(e) => dispatch(setBoardSize({ rows, cols: parseInt(e.target.value) }))}
           />
         </Grid>
-        <Grid item>
-          <Button variant="contained" onClick={startGame}>
+        <Grid>
+          <Button variant="contained" onClick={handleStartGame}>
             Start Game
           </Button>
         </Grid>
@@ -123,7 +106,7 @@ export default function BattleshipUI() {
           </Typography>
           <Grid container spacing={2}>
             {boards.map((b, idx) => (
-              <Grid item xs={6} key={idx}>
+              <Grid key={idx}>
                 <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
                 <GameBoard board={b} />
               </Grid>
@@ -133,7 +116,7 @@ export default function BattleshipUI() {
       )}
 
       <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
-        <Grid item>
+        <Grid>
           <TextField
             label="Row"
             type="number"
@@ -141,7 +124,7 @@ export default function BattleshipUI() {
             onChange={(e) => setRowInput(Math.min(rows-1, parseInt(e.target.value)))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <TextField
             label="Col"
             type="number"
@@ -149,62 +132,26 @@ export default function BattleshipUI() {
             onChange={(e) => setColInput(Math.min(cols-1, parseInt(e.target.value)))}
           />
         </Grid>
-        <Grid item>
+        <Grid>
           <Button variant="outlined" onClick={handleShoot}>
             Let's Shoot
           </Button>
         </Grid>
 
       </Grid>
-      <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
+      <Grid container spacing={2}  visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid visibility={boards.length > 0 ? "visible" : "hidden"}>
-          <Button variant="outlined" onClick={() => setStatsDialog(true)}>
+          <Button variant="outlined" onClick={handleOpenStatsDialog}>
             Show Game Stats
           </Button>
         </Grid>
       </Grid>
 
-      <Typography sx={{ mt: 2 }}>{status}</Typography>
+      <Typography sx={{ mt: 2 }}>{statusMessage}</Typography>
 
-      <Dialog open={winDialog} onClose={() => setWinDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle>🎉 Game Over!</DialogTitle>
-        <DialogContent>
-          <Typography>{status} Play again?</Typography>
-          {winnerBoards.length > 0 && (
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-              {winnerBoards.map((b, idx) => (
-                <Grid item xs={6} key={idx}>
-                  <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
-                  <GameBoard board={b} />
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setWinDialog(false)}>No</Button>
-          <Button
-            onClick={() => {
-              startGame();
-              setWinDialog(false);
-            }}
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <WinDialog />
 
-      <Dialog open={statsDialog} onClose={() => setStatsDialog(false)}>
-        <DialogTitle>📊 Game Stats</DialogTitle>
-        <DialogContent>
-          {game && (
-            <pre>{JSON.stringify(game.gameStats(), null, 2)}</pre>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setStatsDialog(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
+      <StatusDialog />
     </Container>
     
   );
