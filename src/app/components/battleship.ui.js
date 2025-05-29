@@ -10,41 +10,14 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Paper,
   Select,
 } from "@mui/material";
-import { OnePlayerGame, TwoPlayerGame } from "./services/games";
-
+import { OnePlayerGame, TwoPlayerGame } from "../services/games";
+import { GameBoard } from "./game.board";
+import thImage from "../../assets/th.png";
 const createEmptyBoard = (rows, cols) => Array.from({ length: rows }, () => Array(cols).fill("-"));
 const seen = [];
 
-function GameBoard({ board }) {
-  const numRows = board.length;
-  const numCols = board[0]?.length || 0;
-
-  return (
-    <Paper elevation={3} sx={{ p: 2 }}>
-      <Grid container direction="column" spacing={0.5}>
-        {Array.from({ length: numRows }).map((_, rowIndex) => (
-          <Grid item key={rowIndex}>
-            <Grid container spacing={0.5}>
-              {Array.from({ length: numCols }).map((_, colIndex) => (
-                <Grid item key={colIndex}>
-                  <Paper sx={{ width: 30, height: 30, textAlign: "center", lineHeight: "30px" }}>
-                    {board[rowIndex][colIndex] === "-" ? ""
-                      : board[rowIndex][colIndex] === "X" ? "💥"
-                      : board[rowIndex][colIndex] === "O" ? "🟦"
-                      : ""}
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        ))}
-      </Grid>
-    </Paper>
-  );
-}
 
 export default function BattleshipUI() {
   const [rows, setRows] = useState(10);
@@ -105,6 +78,7 @@ export default function BattleshipUI() {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
+      <img src={thImage} alt="Battleship Logo" />
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>

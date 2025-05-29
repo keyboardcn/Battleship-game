@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { Board } = require("../../src/services/board");
+import { Board } from "./board";
 
 describe("Board", () => {
   let game;
