@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { OnePlayerGame, TwoPlayerGame } from "../services/games";
 import { GameBoard } from "./game.board";
+import thImage from "../../assets/th.png";
 const createEmptyBoard = (rows, cols) => Array.from({ length: rows }, () => Array(cols).fill("-"));
 const seen = [];
 
@@ -77,6 +78,7 @@ export default function BattleshipUI() {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
+      <img src={thImage} alt="Battleship Logo" />
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>

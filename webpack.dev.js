@@ -13,7 +13,10 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.css$/, // Load CSS files
-        use: ["style-loader", "css-loader"],
+        use: [
+          "style-loader", 
+          "css-loader"
+        ],
       },
     ],
   },
@@ -27,7 +30,6 @@ module.exports = merge(common, {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html", // HTML template
-      filename: "index.html", // Output file name
     }),
   ],
 });

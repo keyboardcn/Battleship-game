@@ -26,7 +26,7 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: '[name].[hash].[ext]', // Output file naming convention
-            outputPath: 'images/', // Output directory for images
+            outputPath: 'imgs', // Output directory for images
           },
         }
       },
