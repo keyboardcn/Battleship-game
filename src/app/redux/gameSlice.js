@@ -61,7 +61,7 @@ const gameSlice = createSlice({
       const { row, col } = action.payload;
 
       // Basic validation and duplicate shot check
-      const marker = `${row}-${col}`;
+      const marker = `p${state.playerTurn}-${row}-${col}`;
       if (!state.gameInstance || state.seenShots.includes(marker) || row < 0 || row >= state.rows || col < 0 || col >= state.cols) {
         state.statusMessage = "❌Invalid shot or already shot here!";
         return; // Exit if invalid
