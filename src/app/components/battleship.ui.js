@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from 'react';
+import { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
@@ -7,13 +8,11 @@ import {
   Grid,
   Typography,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Select,
 } from "@mui/material";
 import { GameBoard } from "./game.board";
+import { WinDialog } from "./win.dialog";
+import { StatusDialog } from "./status.dialog";
 import thImage from "../../assets/th.png";
 
 import {
@@ -21,13 +20,9 @@ import {
   setGameMode,
   startGame,
   processShoot,
-  closeWinDialog,
   openStatsDialog,
   closeStatsDialog,
 } from '../redux/gameSlice';
-
-//const createEmptyBoard = (rows, cols) => Array.from({ length: rows }, () => Array(cols).fill("-"));
-//const seen = [];
 
 
 export default function BattleshipUI() {
@@ -40,9 +35,7 @@ export default function BattleshipUI() {
     playerTurn,
     boards,
     statusMessage,
-    winDialogOpen,
     statsDialogOpen,
-    winnerBoards,
   } = useSelector((state) => state.game);
 
   const [rowInput, setRowInput] = useState("");
@@ -62,18 +55,9 @@ export default function BattleshipUI() {
     setColInput("");
   };
 
-  // Handlers for dialogs
-  const handleCloseWinDialog = () => {
-    dispatch(closeWinDialog());
-  };
-
   const handleOpenStatsDialog = () => {
     dispatch(openStatsDialog());
   };
-
-  const handleCloseStatsDialog = () => {
-    dispatch(closeStatsDialog());
-  };  
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
@@ -165,45 +149,9 @@ export default function BattleshipUI() {
 
       <Typography sx={{ mt: 2 }}>{statusMessage}</Typography>
 
-      <Dialog open={winDialogOpen} onClose={handleCloseWinDialog} maxWidth="md" fullWidth>
-        <DialogTitle>🎉 Game Over!</DialogTitle>
-        <DialogContent>
-          <Typography>{statusMessage} Play again?</Typography>
-          {winnerBoards.length > 0 && (
-            <Grid container spacing={2} sx={{ mt: 2 }}>
-              {winnerBoards.map((b, idx) => (
-                <Grid item xs={6} key={idx}>
-                  <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
-                  <GameBoard board={b} />
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseWinDialog}>No</Button>
-          <Button
-            onClick={() => {
-              dispatch(startGame());
-              handleCloseWinDialog();
-            }}
-          >
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <WinDialog />
 
-      <Dialog open={statsDialogOpen} onClose={handleCloseStatsDialog} maxWidth="md" fullWidth>
-        <DialogTitle>📊 Game Stats</DialogTitle>
-        <DialogContent>
-          {gameInstance && (
-            <pre>{JSON.stringify(gameInstance.gameStats(), null, 2)}</pre>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseStatsDialog}>Close</Button>
-        </DialogActions>
-      </Dialog>
+      <StatusDialog />
     </Container>
     
   );
