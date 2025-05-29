@@ -58,7 +58,7 @@ export default function BattleshipUI() {
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
-      <img src={thImage} alt="Battleship Logo" width="80%" />
+      <img src={thImage} alt="Battleship Logo" width="100%" />
       <Typography variant="h4" gutterBottom>
         Battleship Game
       </Typography>
@@ -101,7 +101,7 @@ export default function BattleshipUI() {
           <Typography variant="h6" sx={{ mt: 2 }}>
             Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} justifyContent={"space-evenly"} >
             {boards.map((b, idx) => (
               <Grid key={idx}>
                 <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
