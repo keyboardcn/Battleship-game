@@ -11,19 +11,13 @@ const initialState = {
   rows: 10,
   cols: 10,
   mode: "1P", // "1P" for one player, "2P" for two players
-  gameInstance: null, // The actual game object (OnePlayerGame or TwoPlayerGame)
-  playerTurn: 0, // 0 for Player1, 1 for Player2 in 2P mode
-  boards: [], // Array of boards to display (one for 1P, two for 2P)
-  statusMessage: "", // Message displayed to the user (e.g., "Hit!", "Miss!")
   winDialogOpen: false,
   statsDialogOpen: false,
-  winnerBoards: [], // Boards to display in the win dialog
-  seenShots: [], // To track shots already made in the current game
 };
 
 // Create a Redux slice for the game
-const gameSlice = createSlice({
-  name: 'game', // Name of the slice, used as a prefix for action types
+const gameConfigSlice = createSlice({
+  name: 'gameConfig', // Name of the slice, used as a prefix for action types
   initialState, // The initial state defined above
   reducers: {
     // Reducer to set board dimensions
@@ -35,60 +29,8 @@ const gameSlice = createSlice({
     setGameMode: (state, action) => {
       state.mode = action.payload;
     },
-    // Reducer to start a new game
-    startGame: (state) => {
-      let newGame;
-      if (state.mode === "1P") {
-        newGame = new OnePlayerGame("Player1", state.rows, state.cols);
-      } else {
-        newGame = new TwoPlayerGame("Player1", "Player2", state.rows, state.cols);
-      }
-      // Update state with the new game instance and initial boards
-      state.gameInstance = newGame;
-      state.boards = state.mode === "1P"
-        ? [...[newGame.player.board.board]]
-        : [newGame.player1.board.board, newGame.player2.board.board];
-      state.playerTurn = 0; // Reset turn to Player 1
-      state.statusMessage = ""; // Clear status message
-      state.winDialogOpen = false; // Close win dialog
-      state.statsDialogOpen = false; // Close stats dialog
-      state.winnerBoards = []; // Clear winner boards
-      state.seenShots = []; // Reset seen shots for a new game
-      console.log("Game started:", newGame); // Log for debugging
-    },
-    // Reducer to handle a shot attempt
-    processShoot: (state, action) => {
-      const { row, col } = action.payload;
-
-      // Basic validation and duplicate shot check
-      const marker = `p${state.playerTurn}-${row}-${col}`;
-      if (!state.gameInstance || state.seenShots.includes(marker) || row < 0 || row >= state.rows || col < 0 || col >= state.cols) {
-        state.statusMessage = "❌Invalid shot or already shot here!";
-        return; // Exit if invalid
-      }
-
-      // Perform the shot using the game instance
-      const result = state.gameInstance.alternativeShoot(row, col);
-      state.seenShots.push(marker); // Add shot to seen list
-
-      // Update boards based on the game instance
-      state.boards = state.mode === "1P"
-        ? [state.gameInstance.player.board.board]
-        : [state.gameInstance.player1.board.board, state.gameInstance.player2.board.board];
-
-      // Update status message
-      state.statusMessage = result.hit ? `🔥 ${result.shooter} hit!` : `❌ ${result.shooter} missed!`;
-
-      // Check for winner
-      if (result.winner) {
-        state.winnerBoards = [...state.boards]; // Capture final board state
-        state.winDialogOpen = true; // Open win dialog
-      }
-
-      // Switch player turn in 2P mode
-      if (state.mode === "2P") {
-        state.playerTurn = state.playerTurn === 0 ? 1 : 0;
-      }
+    openWinDialog: (state) => {
+      state.winDialogOpen = true;
     },
     // Reducer to close the win dialog
     closeWinDialog: (state) => {
@@ -109,12 +51,11 @@ const gameSlice = createSlice({
 export const {
   setBoardSize,
   setGameMode,
-  startGame,
-  processShoot,
+  openWinDialog,
   closeWinDialog,
   openStatsDialog,
   closeStatsDialog,
-} = gameSlice.actions;
+} = gameConfigSlice.actions;
 
 // Export the reducer
-export default gameSlice.reducer;
+export default gameConfigSlice.reducer;
