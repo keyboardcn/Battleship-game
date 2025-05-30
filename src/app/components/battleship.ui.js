@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
@@ -18,43 +17,48 @@ import thImage from "../../assets/battleship.gif";
 import {
   setBoardSize,
   setGameMode,
-  startGame,
-  processShoot,
+  closeWinDialog,
   openStatsDialog,
+  closeStatsDialog
 } from '../redux/gameSlice';
 
-
+import { GameContext } from '../contexts/game.context';
 export default function BattleshipUI() {
   const dispatch = useDispatch();
   const {
     rows,
     cols,
     mode,
+  } = useSelector((state) => state.gameConfig);
+
+  const {
+    gameInstance,
     playerTurn,
     boards,
     statusMessage,
-  } = useSelector((state) => state.game);
+    startGame,
+    handleShoot,
+    handleOpenStatsDialog,
+  } = useContext(GameContext);
+
 
   const [rowInput, setRowInput] = useState("");
   const [colInput, setColInput] = useState("");
 
 
-  const handleStartGame = () => {
-    dispatch(startGame()); // Dispatch the startGame action to initialize the game}));
+  const onStartGameClick = () => {
+    startGame(); // Dispatch the startGame action to initialize the game}));
     setRowInput(""); // Clear input fields after shot
     setColInput("");
   };
 
-  const handleShoot = () => {
+  const onShootClick = () => {
     // Dispatch the processShoot action with row and col as payload
-    dispatch(processShoot({ row: parseInt(rowInput), col: parseInt(colInput) }));
+    handleShoot(rowInput, colInput);
     setRowInput(""); // Clear input fields after shot
     setColInput("");
   };
 
-  const handleOpenStatsDialog = () => {
-    dispatch(openStatsDialog());
-  };
 
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
@@ -65,7 +69,11 @@ export default function BattleshipUI() {
 
       <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
         <Grid>
-          <Select value={mode} onChange={(e) => dispatch(setGameMode(e.target.value))} displayEmpty>
+          <Select 
+            value={mode} 
+            onChange={(e) => dispatch(setGameMode(e.target.value))} 
+            displayEmpty
+            inputProps={{ 'aria-label': 'Game Mode' }}>
             <MenuItem value="1P">One Player</MenuItem>
             <MenuItem value="2P">Two Players</MenuItem>
           </Select>
@@ -90,12 +98,13 @@ export default function BattleshipUI() {
           />
         </Grid>
         <Grid>
-          <Button variant="contained" onClick={handleStartGame}>
+          <Button variant="contained" onClick={onStartGameClick}>
             Start Game
           </Button>
         </Grid>
       </Grid>
-
+      
+      {/* Display boards if game has started */}
       {boards.length > 0 && (
         <>
           <Typography variant="h6" sx={{ mt: 2 }}>
@@ -112,6 +121,7 @@ export default function BattleshipUI() {
         </>
       )}
 
+      {/* Shoot controls and stats button, visible only if game has started */}
       <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid>
           <TextField
@@ -130,12 +140,12 @@ export default function BattleshipUI() {
           />
         </Grid>
         <Grid>
-          <Button variant="outlined" onClick={handleShoot}>
+          <Button variant="outlined" onClick={onShootClick} disabled={!gameInstance}>
             Let's Shoot
           </Button>
         </Grid>
-
       </Grid>
+      {/* Show game status if available */}
       <Grid container spacing={2}  visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid visibility={boards.length > 0 ? "visible" : "hidden"}>
           <Button variant="outlined" onClick={handleOpenStatsDialog}>

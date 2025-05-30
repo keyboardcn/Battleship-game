@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Dialog,
@@ -8,20 +8,20 @@ import {
   Button,
 } from "@mui/material";
 import { closeStatsDialog } from '../redux/gameSlice';
+import { GameContext } from '../contexts/game.context';
 
 export function StatusDialog() {
   const dispatch = useDispatch();
   const {
     statsDialogOpen,
-    gameInstance
-  } = useSelector((state) => state.game);
+  } = useSelector((state) => state.gameConfig);
 
-  const handleCloseStatsDialog = () => {
-    dispatch(closeStatsDialog());
-  };
+  const {
+    gameInstance,  
+  } = useContext(GameContext);
 
   return (
-    <Dialog open={statsDialogOpen} onClose={handleCloseStatsDialog} maxWidth="md" fullWidth>
+    <Dialog open={statsDialogOpen} onClose={() => dispatch(closeStatsDialog())} maxWidth="md" fullWidth>
       <DialogTitle>📊 Game Stats</DialogTitle>
       <DialogContent>
         {gameInstance && (
@@ -29,7 +29,7 @@ export function StatusDialog() {
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseStatsDialog}>Close</Button>
+        <Button onClick={() => dispatch(closeStatsDialog())}>Close</Button>
       </DialogActions>
     </Dialog>
   );
