@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React from "react";
+import { useState, useContext } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
@@ -9,18 +10,15 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { GameBoard } from "./game.board";
+import { ShowBoards } from "./show.boards";
+import GameControls  from "./game.controls";
 import { WinDialog } from "./win.dialog";
 import { StatusDialog } from "./status.dialog";
 import thImage from "../../assets/battleship.gif";
 
 import {
   setBoardSize,
-  setGameMode,
-  closeWinDialog,
-  openStatsDialog,
-  closeStatsDialog
-} from '../redux/gameSlice';
+  setGameMode} from '../redux/gameSlice';
 
 import { GameContext } from '../contexts/game.context';
 export default function BattleshipUI() {
@@ -59,7 +57,10 @@ export default function BattleshipUI() {
     setColInput("");
   };
 
-
+  const isGameStarted = boards.length > 0;
+  const isSingleBoardLayout = boards.length === 1;
+  console.log("BattleshipUI: isSingleBoardLayout", isSingleBoardLayout);
+  
   return (
     <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
       <img src={thImage} alt="Battleship Logo" width="100%" />
@@ -67,7 +68,7 @@ export default function BattleshipUI() {
         Battleship Game
       </Typography>
 
-      <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
+      <Grid container spacing={2} alignItems="center" border={1} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
         <Grid>
           <Select 
             value={mode} 
@@ -78,9 +79,7 @@ export default function BattleshipUI() {
             <MenuItem value="2P">Two Players</MenuItem>
           </Select>
         </Grid>
-      </Grid>
 
-      <Grid container spacing={2} alignItems="center">
         <Grid>
           <TextField
             type="number"
@@ -103,56 +102,45 @@ export default function BattleshipUI() {
           </Button>
         </Grid>
       </Grid>
-      
-      {/* Display boards if game has started */}
-      {boards.length > 0 && (
-        <>
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
-          </Typography>
-          <Grid container spacing={2} justifyContent={"space-evenly"} >
-            {boards.map((b, idx) => (
-              <Grid key={idx}>
-                <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
-                <GameBoard board={b} />
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      )}
 
-      {/* Shoot controls and stats button, visible only if game has started */}
-      <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
-        <Grid>
-          <TextField
-            label="Row"
-            type="number"
-            value={rowInput}
-            onChange={(e) => setRowInput(Math.min(rows-1, parseInt(e.target.value)))}
-          />
-        </Grid>
-        <Grid>
-          <TextField
-            label="Col"
-            type="number"
-            value={colInput}
-            onChange={(e) => setColInput(Math.min(cols-1, parseInt(e.target.value)))}
-          />
-        </Grid>
-        <Grid>
-          <Button variant="outlined" onClick={onShootClick} disabled={!gameInstance}>
-            Let's Shoot
-          </Button>
-        </Grid>
-      </Grid>
-      {/* Show game status if available */}
-      <Grid container spacing={2}  visibility={boards.length > 0 ? "visible" : "hidden"}>
-        <Grid visibility={boards.length > 0 ? "visible" : "hidden"}>
-          <Button variant="outlined" onClick={handleOpenStatsDialog}>
-            Show Game Stats
-          </Button>
-        </Grid>
-      </Grid>
+      {isSingleBoardLayout ? (
+            // Layout for 1P mode: GameBoard and GameControls in the same row
+            <Grid container spacing={2} boarder={2} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
+              <Grid xs={12} md={6}>
+                <ShowBoards />
+              </Grid>
+              <Grid xs={12} md={6} direction={"column"} container spacing={2} justifyContent={"center"}>
+                <GameControls
+                  rows={rows}
+                  cols={cols}
+                  rowInput={rowInput}
+                  setRowInput={setRowInput}
+                  colInput={colInput}
+                  setColInput={setColInput}
+                  onShootClick={onShootClick}
+                  isGameStarted={isGameStarted}
+                  isSingleBoardLayout={true}
+                />
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid container spacing={2} boarder={1} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
+              <ShowBoards />
+              <GameControls
+                rows={rows}
+                cols={cols}
+                rowInput={rowInput}
+                setRowInput={setRowInput}
+                colInput={colInput}
+                setColInput={setColInput}
+                onShootClick={onShootClick}
+                isGameStarted={isGameStarted} 
+                isSingleBoardLayout={false}
+              />
+            </Grid>
+          )
+      }
+      
 
       <Typography sx={{ mt: 2 }}>{statusMessage}</Typography>
 
