@@ -68,7 +68,7 @@ export default function BattleshipUI() {
         Battleship Game
       </Typography>
 
-      <Grid container spacing={10} alignItems="center" sx={{ mb: 2 }}>
+      <Grid container spacing={2} alignItems="center" border={1} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
         <Grid>
           <Select 
             value={mode} 
@@ -79,9 +79,7 @@ export default function BattleshipUI() {
             <MenuItem value="2P">Two Players</MenuItem>
           </Select>
         </Grid>
-      </Grid>
 
-      <Grid container spacing={2} alignItems="center">
         <Grid>
           <TextField
             type="number"
@@ -107,7 +105,7 @@ export default function BattleshipUI() {
 
       {isSingleBoardLayout ? (
             // Layout for 1P mode: GameBoard and GameControls in the same row
-            <Grid container spacing={2} >
+            <Grid container spacing={2} boarder={2} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
               <Grid xs={12} md={6}>
                 <ShowBoards />
               </Grid>
@@ -126,7 +124,7 @@ export default function BattleshipUI() {
               </Grid>
             </Grid>
           ) : (
-            <>
+            <Grid container spacing={2} boarder={1} borderColor="grey.300" sx={{ mb: 2, p: 2 }}>
               <ShowBoards />
               <GameControls
                 rows={rows}
@@ -139,7 +137,7 @@ export default function BattleshipUI() {
                 isGameStarted={isGameStarted} 
                 isSingleBoardLayout={false}
               />
-            </>
+            </Grid>
           )
       }
       
