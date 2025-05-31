@@ -9,7 +9,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { GameBoard } from "./game.board";
+import { ShowBoards } from "./show.boards";
 import { WinDialog } from "./win.dialog";
 import { StatusDialog } from "./status.dialog";
 import thImage from "../../assets/battleship.gif";
@@ -104,23 +104,8 @@ export default function BattleshipUI() {
         </Grid>
       </Grid>
       
-      {/* Display boards if game has started */}
-      {boards.length > 0 && (
-        <>
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
-          </Typography>
-          <Grid container spacing={2} justifyContent={"space-evenly"} >
-            {boards.map((b, idx) => (
-              <Grid key={idx}>
-                <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
-                <GameBoard board={b} />
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      )}
-
+      <ShowBoards />
+      
       {/* Shoot controls and stats button, visible only if game has started */}
       <Grid container spacing={2} sx={{ mt: 2 }} visibility={boards.length > 0 ? "visible" : "hidden"}>
         <Grid>
