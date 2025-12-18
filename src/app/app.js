@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BattleshipUI from './components/battleship.ui';
 import HomeComponent from './battleShip/HomeComponent';
 import InputValidate from './inputValidation/input.validate';
+import RenderTextComponent from './textCount/render.text';
 import './app.css';
 function App() {
   const [showDD, setShowDD] = useState(false);
@@ -30,7 +31,8 @@ function App() {
             </div>
             
             <Link to="/battleship">Battleship Game</Link>
-
+            <Link to="/render-text">Render Text</Link>
+            
             <div className='dropdown-wrapper'
                id='breadth'
                onClick={() => {
@@ -47,14 +49,17 @@ function App() {
               <li>
                 <Link to="/battleship" onClick={() => setShowDD(false)}>Battleship Game</Link>
               </li>
+              <li>
+                <Link to="/render-text" onClick={() => setShowDD(false)}>Render Text</Link>
+              </li>
             </ul>)}
             </div>
-
           </nav>
           <Routes>
             <Route path="/" element={<HomeComponent />} />
             <Route path="/input-validate" element={<InputValidate />} />
             <Route path="/battleship" element={<BattleshipUI />} />
+            <Route path="/render-text" element={<RenderTextComponent />} />
           </Routes>
         </div>
       </Router>
