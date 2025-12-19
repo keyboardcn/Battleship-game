@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'; // Import useDispatch
+import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { OnePlayerGame, TwoPlayerGame } from '../services/games';
 // Import dialog actions from Redux
 import { 
@@ -14,8 +14,8 @@ export const GameContext = createContext(null);
 
 // GameProvider component to manage the game instance and related game state
 export const GameProvider = ({ children }) => {
-  const { rows, cols, mode } = useSelector((state) => state.gameConfig);
-  const dispatch = useDispatch(); // Get dispatch for Redux actions
+  const { rows, cols, mode } = useAppSelector((state) => state.gameConfig);
+  const dispatch = useAppDispatch(); // Get dispatch for Redux actions
 
   const [gameInstance, setGameInstance] = useState(null);
   const [playerTurn, setPlayerTurn] = useState(0); // 0 for Player1, 1 for Player2
@@ -51,6 +51,10 @@ export const GameProvider = ({ children }) => {
 
   // Function to handle a shot attempt
   const handleShoot = (rowInput, colInput) => {
+    if (rowInput === "" || colInput === "") {
+      setStatusMessage("Please enter both row and column!");
+      return;
+    }
     if (!gameInstance) {
       setStatusMessage("Game not started!");
       return;

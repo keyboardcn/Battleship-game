@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../redux/hooks';
 import {
     Container,
   Grid,
@@ -11,7 +11,7 @@ import { GameContext } from '../contexts/game.context';
 export function ShowBoards() {
   const {
     mode,
-  } = useSelector((state) => state.gameConfig);
+  } = useAppSelector((state) => state.gameConfig);
 
   const {
     playerTurn,

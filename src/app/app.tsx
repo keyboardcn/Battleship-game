@@ -22,10 +22,10 @@ function App() {
               { showPlaceHolder &&
               (<ul className='dropdown' onMouseLeave={() => setShowPlaceHolder(false)}>
                 <li>
-                  <Link>test link 1</Link>
+                  <Link to="/test-link-1">test link 1</Link>
                 </li>
                 <li>
-                  <Link>test link 2</Link>
+                  <Link to="/test-link-2">test link 2</Link>
                 </li>
               </ul>)}             
             </div>

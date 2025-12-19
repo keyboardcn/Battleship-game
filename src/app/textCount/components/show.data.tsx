@@ -1,5 +1,11 @@
 import React, { useState, useMemo, memo } from 'react';
-export const ShowDataComponent = memo(({data}) => {
+
+export type MemoizedValueType = {
+        length: number;
+        content: string;
+}
+
+export const ShowDataComponent = memo<MemoizedValueType>((data) => {
     console.log("Showing data:", JSON.stringify(data));
     return (
         <div>

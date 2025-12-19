@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
     Dialog,
     DialogTitle,
@@ -16,11 +16,11 @@ import {
 import { GameContext } from '../contexts/game.context';
 
 export function WinDialog() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const {
         mode,
         winDialogOpen,
-    } = useSelector((state) => state.gameConfig);
+    } = useAppSelector((state) => state.gameConfig);
     
     const {
         statusMessage,
@@ -39,7 +39,7 @@ export function WinDialog() {
                 {winnerBoards.length > 0 && (
                     <Grid container spacing={2} sx={{ mt: 2 }}>
                     {winnerBoards.map((b, idx) => (
-                        <Grid item xs={6} key={idx}>
+                        <Grid key={idx}>
                         <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
                         <GameBoard board={b} />
                         </Grid>

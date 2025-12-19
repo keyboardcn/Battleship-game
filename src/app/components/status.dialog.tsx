@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   Dialog,
   DialogTitle,
@@ -11,10 +11,10 @@ import { closeStatsDialog } from '../redux/gameSlice';
 import { GameContext } from '../contexts/game.context';
 
 export function StatusDialog() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     statsDialogOpen,
-  } = useSelector((state) => state.gameConfig);
+  } = useAppSelector((state) => state.gameConfig);
 
   const {
     gameInstance,  

@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import './input.validate.css';
 
 export default function InputValidate() {
-    const [pName, setPName] = useState(null);
+    const [pName, setPName] = useState<string | null>(null);
     const [pMsg, setPMsg] = useState("");
-    const [quantity, setQuantity] = useState(null);
+    const [quantity, setQuantity] = useState<number | null>(null);
     const [qMsg, setQMsg] = useState("");
     let firstRender = true;
     const handlePNameChange = (e) => {
@@ -39,7 +39,7 @@ export default function InputValidate() {
                     <input type='text'  
                         data-set-id="input-name"
                         placeholder="Enter product name"
-                        onInput={(e) => setPName(e.target.value)}
+                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => setPName(e.target.value)}
                         onBlur={(e) => handlePNameChange(e)}
                     />
                 </div>
@@ -51,14 +51,15 @@ export default function InputValidate() {
                     <input type='number' 
                         data-set-id="input-quantity"
                         placeholder="Enter quantity"
-                        onInput={(e) => setQuantity(e.target.value)}
+                        onInput={(e: React.ChangeEvent<HTMLInputElement>) => setQuantity(Number(e.target.value))}
                         onBlur={(e) => handlePQuantityChange(e)} />
                 </div>
                     {   qMsg.length > 0 &&
                         <p>{qMsg}</p>
                     }
                 <button
-                disabled={pMsg.length || qMsg.length || (quantity == null && pName == null)}>Submit</button>
+                disabled={(pMsg.length || qMsg.length || (quantity == null && pName == null)) as unknown as boolean}>
+                    Submit</button>
             </div>
         </div>
     );

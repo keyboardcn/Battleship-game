@@ -2,10 +2,14 @@ var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: {
-    main: './src/index.js',
+    main: './src/index.tsx',
   }, // Entry point
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/, // Transpile JS/JSX files
+        exclude: /node_modules/,
+        use: 'ts-loader',      },
       {
         test: /\.(js|jsx)$/, // Transpile JS/JSX files
         exclude: /node_modules/,
@@ -33,6 +37,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx'], // Resolve JS and JSX extensions
+    extensions: ['.js', '.jsx', '.ts', '.tsx'], // Resolve JS and JSX extensions
   }
 };
