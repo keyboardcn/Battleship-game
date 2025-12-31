@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.input-row {
+    display: flex;
+    align-items: flex-start;
+}
+
+.input-row label {
+    margin-right: 10px;
+    width: 180px;
+}
+
+.input-row-button {
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    button {
+        width: 100%;
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    .input-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-row label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}

@@ -70,14 +70,14 @@ button {
 
 .dropdown {
   position: absolute;
-  top: 100%;          /* adjust to sit under nav */
+  top: 70%;          /* adjust to sit under nav */
   right: 10px;        /* adjust if needed */
   flex-direction: column;
   background: #282c34;
   border: 1px solid #444;
   border-radius: 2px;
   padding: 0.5rem 0;
-  min-width: 150px;
+  min-width: 200px;
   z-index: 1000;
 }
 

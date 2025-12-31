@@ -1,24 +1,41 @@
 import React, {useState} from 'react';
-import './HomeComponent.css';
-import SetupComponent from './SetupComponent';
+import './BattleshipHomeComponent.css';
 import MatrixComponent from './MatrixComponent';
+import ResizeComponent from './ResizeComponent';
 
-export default function HomeComponent() {
+export default function BattleshipHomeComponent() {
   const [action, setAction] = useState("Start");
   const [matrix, setMatrix] = 
     useState([['$', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]);
-  const resetBMatrix = (size) => {
-    console.log(`Resetting board with size: ${size}`);
-    setAction('Reset');
-    const newMatrix = Array.from({ length:size}, () => Array(size).fill('-'));
-    //TODO: Randomly place ships on the board
-    newMatrix[0][0] = '$';
-
+  
+  const resetBMatrix = (size: number, ships: number) => {
+    console.log(`Resetting board with size: ${size} and ships: ${ships}`);
+    const newMatrix: string[][] = Array.from({ length:size}, () => Array(size).fill('-'));
+    
+    const positions = randomShips(size, ships);
+    positions.forEach((pos) => {
+      const row = Math.floor(pos / size);
+      const col = pos % size;
+      newMatrix[row][col] = '$'; // Place ship
+    });
     setMatrix(newMatrix);
     console.log("New board matrix:", newMatrix);
   };
 
-  const attack = (row, col) => {
+  const randomShips = (size: number, ships: number): number[] => {
+    console.log(`Placing ${ships} ships randomly on a ${size}x${size} board.`);
+    let positions = new Set<number>();
+
+    while (positions.size < ships) {
+      const pos = Math.floor(Math.random() * size * size);
+      if (!positions.has(pos)) {
+        positions.add(pos);
+      }
+    }
+    return Array.from(positions);
+  }
+
+  const attack = (row: number, col: number) => {
     console.log(`Attacking position: (${row}, ${col})`);
     if (row < 0 || row >= matrix.length || col < 0 || col >= matrix.length) {
       console.error("Attack position out of bounds");
@@ -52,7 +69,7 @@ export default function HomeComponent() {
   return (
     <div className="container-wrapper">
       <h1>Welcome to the Battleship Game!</h1>
-      <SetupComponent action={action} resetBMatrix={resetBMatrix} />
+      <ResizeComponent resize={resetBMatrix} />
       <MatrixComponent matrix={matrix} attack={attack} />
     </div>
   );

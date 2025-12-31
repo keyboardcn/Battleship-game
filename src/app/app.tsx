@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BattleshipUI from './components/battleship.ui';
-import HomeComponent from './battleShip/HomeComponent';
+import BattleshipHomeComponent from './battleShip/BattleshipHomeComponent';
 import InputValidate from './inputValidation/input.validate';
 import RenderTextComponent from './textCount/render.text';
+import UserProfileHomeComponent from './userProfile/userProfileHomeComponent';
+import BookHomeComponent from './booksList/book.home.component';
+
 import './app.css';
 function App() {
   const [showDD, setShowDD] = useState(false);
@@ -13,19 +16,22 @@ function App() {
         <div className="app">
           <nav>
             <Link to="/">Home</Link>
-            <Link to="/input-validate">Input Validate</Link>
             <div
                 className='dropdown-wrapper extra-div'
                 onClick={() => setShowPlaceHolder(true)}
-                onMouseLeave={() => setShowPlaceHolder(false)}>
-              <a>Empty Drop</a>
+                >
+              <a>Users & Books</a>
               { showPlaceHolder &&
-              (<ul className='dropdown' onMouseLeave={() => setShowPlaceHolder(false)}>
+              (<ul className='dropdown' onMouseEnter={() => setShowPlaceHolder(true)} onMouseLeave={() => setShowPlaceHolder(false)}>
                 <li>
-                  <Link to="/test-link-1">test link 1</Link>
+                  <Link to="/user-profile">User Profile</Link>
                 </li>
                 <li>
-                  <Link to="/test-link-2">test link 2</Link>
+                  <Link to="/show-books">Show Books</Link>
+                </li>
+                <li>
+                  <Link to="/input-validate">Input Validate</Link>
+
                 </li>
               </ul>)}             
             </div>
@@ -44,6 +50,9 @@ function App() {
             { showDD &&
             (<ul className='dropdown' onMouseLeave={() => setShowDD(false)}>
               <li>
+                <Link to="/user-profile" onClick={() => setShowDD(false)}>User Profile</Link>
+              </li>
+              <li>
                 <Link to="/input-validate" onClick={() => setShowDD(false)}>Input Validate</Link>
               </li>
               <li>
@@ -56,10 +65,12 @@ function App() {
             </div>
           </nav>
           <Routes>
-            <Route path="/" element={<HomeComponent />} />
+            <Route path="/" element={<BattleshipHomeComponent />} />
+            <Route path="/user-profile" element={<UserProfileHomeComponent />} />
             <Route path="/input-validate" element={<InputValidate />} />
             <Route path="/battleship" element={<BattleshipUI />} />
             <Route path="/render-text" element={<RenderTextComponent />} />
+            <Route path="/show-books" element={<BookHomeComponent />} />
           </Routes>
         </div>
       </Router>

@@ -1,5 +1,14 @@
 export class Board {
-  constructor(n, m) {
+  rows: number;
+  cols: number;
+  board: string[][];
+  ships: number[][][];
+  shipLengths: number[];
+  hits: number;
+  misses: number;
+  remainingShips: number;
+
+  constructor(n: number, m: number) {
     this.rows = n;
     this.cols = m;
     this.board = Array.from({ length: n }, () => Array(m).fill("-"));

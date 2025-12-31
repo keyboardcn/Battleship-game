@@ -12,7 +12,6 @@ import {
 // Create the GameContext
 export const GameContext = createContext(null);
 
-// GameProvider component to manage the game instance and related game state
 export const GameProvider = ({ children }) => {
   const { rows, cols, mode } = useAppSelector((state) => state.gameConfig);
   const dispatch = useAppDispatch(); // Get dispatch for Redux actions

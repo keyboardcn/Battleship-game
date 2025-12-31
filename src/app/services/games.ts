@@ -1,11 +1,15 @@
 
 const { Board } = require('./board');
 class AbstractGame {
-  gameStats() {}
-  alternativeShoot() {}
+  gameStats() {};
+  alternativeShoot(row: number, col: number) {};
 }
 
 export class TwoPlayerGame extends AbstractGame {
+  player1: any;
+  player2: any;
+  currentTurn: number;
+  winner: string | null;
   constructor(name1, name2, n, m) {
     super();
     this.player1 = { name: name1, board: new Board(n, m), turns: 0, hits: 0, misses: 0 };
@@ -31,7 +35,7 @@ export class TwoPlayerGame extends AbstractGame {
     };
   }
 
-  alternativeShoot(row, col) {
+  alternativeShoot(row: number, col: number) {
     if (this.winner) return { winner: this.winner };
 
     let shooter = this.currentTurn === 1 ? this.player1 : this.player2;
@@ -58,6 +62,8 @@ export class TwoPlayerGame extends AbstractGame {
 }
 
 export class OnePlayerGame extends AbstractGame {
+  player: any;
+  winner: string | null;
   constructor(name, n, m) {
     super();
     this.player = { name: name, board: new Board(n, m), turns: 0, hits: 0, misses: 0 };
