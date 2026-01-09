@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .container {
     display: flex;
     flex-direction: column;
@@ -8,6 +10,7 @@
 .input-row {
     display: flex;
     align-items: flex-start;
+    width: 100%;
 }
 
 .input-row label {
@@ -15,15 +18,6 @@
     width: 180px;
 }
 
-.input-row-button {
-    margin-top: 10px;
-    display: block;
-    width: 100%;
-    button {
-        width: 100%;
-        display: block;
-    }
-}
 
 @media (max-width: 480px) {
     .input-row {

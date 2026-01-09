@@ -1,49 +1,59 @@
-// purpose: 
+// purpose:
 // two inputs: number for size row * column, ships < size
 // button start/reset
-import './ResizeComponent.css';
-import React, {useCallback, useEffect, useState} from "react";
+import "./ResizeComponent.css";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  LabelInputComponent,
+  ButtonComponent,
+  CenterCardComponent,
+  SectionComponent,
+} from "../commons/common.components";
 
-type StatusType = "Start" | "Reset" ;
+type StatusType = "Start" | "Reset";
 
 const ResizeComponent = ({ resize }) => {
-    const [size, setSize] = useState<number>(5);
-    const [ships, setShips] = useState<number>(5);
-    const [status, setStatus] = useState<StatusType>("Start");
-    
-    const handleClick = useCallback(() => {
-        resize(size, ships);
-        setStatus("Reset");
-    }, [size, ships]);
+  const [size, setSize] = useState<number>(5);
+  const [ships, setShips] = useState<number>(5);
+  const [status, setStatus] = useState<StatusType>("Start");
 
-    return (
-        <div className="container">
-            <div className="input-row">
-                <label htmlFor="size-input"> Size (rows = columns):</label>
-                <input 
-                    id="size-input"
-                    type="number"
-                    placeholder="Size(rows=columns)"
-                    value={size}
-                    onChange={(e) => setSize(Number(e.target.value))}
-                    />
-            </div>
-            <div className="input-row">
+  const handleClick = useCallback(() => {
+    resize(size, ships);
+    setStatus("Reset");
+  }, [size, ships]);
 
-                <label htmlFor="ships-input"> Ships:</label>
-                <input
-                    id="ships-input"
-                    type="number"
-                    placeholder="Number of ships"
-                    value={ships}
-                    onChange={(e) => setShips(Number(e.target.value))}
-                    />
-            </div>
-            <div className='input-row-button'>
-                <button id="start-reset-button" onClick={handleClick}>{status}</button>
-            </div>
-        </div>
-    )
-}
+  return (
+    <SectionComponent>
+      <CenterCardComponent id="resize_setting_1">
+        <LabelInputComponent
+          labelData={{
+            id: "label-matrix-size-input",
+            htmlFor: "matrix-size-input",
+            content: "Size (rows = columns):",
+          }}
+          inputData={{ id: "matrix-size-input", type: "number", value: size }}
+          onChange={setSize}
+        ></LabelInputComponent>
+        <LabelInputComponent
+          labelData={{
+            id: "label-ships-input",
+            htmlFor: "ships-input",
+            content: "Ships:",
+          }}
+          inputData={{ id: "ships-input", type: "number", value: ships }}
+          onChange={setShips}
+        ></LabelInputComponent>
+      </CenterCardComponent>
+
+      <CenterCardComponent id="resize_setting_3">
+        <ButtonComponent
+          id="start-rest-btn"
+          content={status}
+          onClick={handleClick}
+        ></ButtonComponent>
+      </CenterCardComponent>
+    </SectionComponent>
+  );
+};
 
 export default ResizeComponent;

@@ -7,6 +7,8 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.0",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -17,14 +19,13 @@
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.8.2",
-    "react-scripts": "^5.0.1",
+    "tailwindcss": "^4.1.18",
     "ts-loader": "^9.5.4",
-    "typescript": "^5.9.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js --open",
-    "build": "webpack --config webpack.prod.js",
+    "start": "vite",
+    "build": "vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -53,16 +54,16 @@
     "@types/jest": "^30.0.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
     "html-loader": "^5.1.0",
-    "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
     "mocha": "^11.5.0",
+    "react-scripts": "^5.0.1",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
-    "webpack": "^5.99.9",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.1"
+    "typescript": "^4.9.5",
+    "vite": "^7.3.0"
   }
 }

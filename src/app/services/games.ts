@@ -1,5 +1,6 @@
 
-const { Board } = require('./board');
+import { Board } from "./board";
+
 class AbstractGame {
   gameStats() {};
   alternativeShoot(row: number, col: number) {};
