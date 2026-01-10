@@ -1,22 +1,21 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import {
-  Container,
-  Button,
-  TextField,
-  Grid,
-  Typography,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { Container, Button, TextField, Grid, Typography } from "@mui/material";
 import { ShowBoards } from "./show.boards";
 import GameControls from "./game.controls";
 import { WinDialog } from "./win.dialog";
 import { StatusDialog } from "./status.dialog";
-import thImage from "../../assets/battleship.gif";
+import thImage from "../../assets/battleship.png";
 
 import { setBoardSize, setGameMode } from "../redux/gameSlice";
+import {
+  PageComponent,
+  SectionComponent,
+  CenterCardComponent,
+} from "../commons/common.components";
+
+import ResizeComponent from "../battleShip/ResizeComponent";
 
 import { GameContext } from "../contexts/game.context";
 export default function BattleshipUI() {
@@ -24,22 +23,17 @@ export default function BattleshipUI() {
   const { rows, cols, mode } = useAppSelector((state) => state.gameConfig);
 
   const {
-    gameInstance,
-    playerTurn,
     boards,
     statusMessage,
-    startGame,
     handleShoot,
-    handleOpenStatsDialog,
   } = useContext(GameContext);
 
   const [rowInput, setRowInput] = useState("");
   const [colInput, setColInput] = useState("");
 
-  const onStartGameClick = () => {
-    startGame(); // Dispatch the startGame action to initialize the game}));
-    setRowInput(""); // Clear input fields after shot
-    setColInput("");
+  const onReset = (rows: number) => {
+    console.log("rows and ships", rows, rows);
+    dispatch(setBoardSize({ rows: rows, cols: rows }));
   };
 
   const onShootClick = () => {
@@ -54,119 +48,60 @@ export default function BattleshipUI() {
   console.log("BattleshipUI: isSingleBoardLayout", isSingleBoardLayout);
 
   return (
-    <Container sx={{ mt: 4, mb: 4 }} maxWidth="md">
-      <img src={thImage} alt="Battleship Logo" width="100%" />
-      <Typography variant="h4" gutterBottom>
-        Battleship Game
-      </Typography>
+    <PageComponent>
+      <SectionComponent>
+        <CenterCardComponent id="header">
+          <img
+            src={thImage}
+            className="h-14 bg-transparent"
+            alt="Battleship Logo"
+          />
+          <h2 className="font-bold text-blue-600 text-5xl max-md:text-2xl">Battleship Game</h2>
+        </CenterCardComponent>
+      </SectionComponent>
 
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        border={1}
-        borderColor="grey.300"
-        sx={{ mb: 2, p: 2 }}
-      >
-        <Grid>
-          <Select
+      <SectionComponent>
+        <CenterCardComponent id="player-row">
+          <select
+            id="player-select"
+            className="w-full h-12 text-blue-600 font-bold hover:bg-green-300 border border-amber-300
+            focus:bg-green-300"
             value={mode}
             onChange={(e) => dispatch(setGameMode(e.target.value))}
-            displayEmpty
-            inputProps={{ "aria-label": "Game Mode" }}
           >
-            <MenuItem value="1P">One Player</MenuItem>
-            <MenuItem value="2P">Two Players</MenuItem>
-          </Select>
-        </Grid>
+            <option value="1P" className="text-blue-600 hover:bg-blue-300">
+              One Player
+            </option>
+            <option value="2P" className="text-blue-600 hover:bg-blue-300">
+              Two Players
+            </option>
+          </select>
+        </CenterCardComponent>
+        <ResizeComponent resize={onReset}></ResizeComponent>
+      </SectionComponent>
+      
+      <ShowBoards />
+      
+      <SectionComponent>
 
-        <Grid>
-          <TextField
-            type="number"
-            label="Rows"
-            value={rows}
-            onChange={(e) =>
-              dispatch(setBoardSize({ rows: parseInt(e.target.value), cols }))
-            }
-          />
-        </Grid>
-        <Grid>
-          <TextField
-            type="number"
-            label="Cols"
-            value={cols}
-            onChange={(e) =>
-              dispatch(setBoardSize({ rows, cols: parseInt(e.target.value) }))
-            }
-          />
-        </Grid>
-        <Grid>
-          <Button variant="contained" onClick={onStartGameClick}>
-            Start Game
-          </Button>
-        </Grid>
-      </Grid>
+        <GameControls
+          rows={rows}
+          cols={cols}
+          rowInput={rowInput}
+          setRowInput={setRowInput}
+          colInput={colInput}
+          setColInput={setColInput}
+          onShootClick={onShootClick}
+          isGameStarted={isGameStarted}
+          isSingleBoardLayout={false}
+        />
 
-      {isSingleBoardLayout ? (
-        // Layout for 1P mode: GameBoard and GameControls in the same row
-        <Grid
-          container
-          spacing={2}
-          border={2}
-          borderColor="grey.300"
-          sx={{ mb: 2, p: 2 }}
-        >
-          <Grid size={{ xs: 12, md: 6 }}>
-            <ShowBoards />
-          </Grid>
-          <Grid
-            size={{ xs: 12, md: 6 }}
-            direction={"column"}
-            container
-            spacing={2}
-            justifyContent={"center"}
-          >
-            <GameControls
-              rows={rows}
-              cols={cols}
-              rowInput={rowInput}
-              setRowInput={setRowInput}
-              colInput={colInput}
-              setColInput={setColInput}
-              onShootClick={onShootClick}
-              isGameStarted={isGameStarted}
-              isSingleBoardLayout={true}
-            />
-          </Grid>
-        </Grid>
-      ) : (
-        <Grid
-          container
-          spacing={2}
-          border={1}
-          borderColor="grey.300"
-          sx={{ mb: 2, p: 2 }}
-        >
-          <ShowBoards />
-          <GameControls
-            rows={rows}
-            cols={cols}
-            rowInput={rowInput}
-            setRowInput={setRowInput}
-            colInput={colInput}
-            setColInput={setColInput}
-            onShootClick={onShootClick}
-            isGameStarted={isGameStarted}
-            isSingleBoardLayout={false}
-          />
-        </Grid>
-      )}
+        <Typography sx={{ mt: 2 }}>{statusMessage}</Typography>
 
-      <Typography sx={{ mt: 2 }}>{statusMessage}</Typography>
+        <WinDialog />
 
-      <WinDialog />
-
-      <StatusDialog />
-    </Container>
+        <StatusDialog />
+      </SectionComponent>
+    </PageComponent>
   );
 }

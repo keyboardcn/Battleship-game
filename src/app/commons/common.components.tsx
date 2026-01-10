@@ -84,7 +84,7 @@ interface ICardProps {
 export function CenterCardComponent({id, children}: PropsWithChildren<ICardProps>)
 {
     return (
-        <div id={id} className="m-1 flex justify-center gap-1 rounded-xl bg-blue-100 p-6 max-md:flex-col">
+        <div id={id} className="m-1 flex justify-center items-center gap-1 rounded-xl bg-blue-100 p-6 max-md:flex-col max-md:justify-center">
             { children }
         </div>
     )

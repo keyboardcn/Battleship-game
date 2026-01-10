@@ -1,12 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useAppSelector } from '../redux/hooks';
-import {
-    Container,
-  Grid,
-  Typography,
-} from "@mui/material";
-import { GameBoard } from "./game.board";
 
+import { MatrixOfSquareComponent, CenterCardComponent, SectionComponent } from '../commons/common.components';
 import { GameContext } from '../contexts/game.context';
 export function ShowBoards() {
   const {
@@ -16,26 +11,20 @@ export function ShowBoards() {
   const {
     playerTurn,
     boards,
+    handleShoot,
   } = useContext(GameContext);
+  
 
   return (
-    <Container>
-        {/* Display boards if game has started */}
-        {boards.length > 0 && (
-        <>
-            <Typography variant="h6" sx={{ mt: 2 }}>
-            Game Board {mode === "2P" ? `- ${playerTurn === 0 ? "Player1's Turn" : "Player2's Turn"}` : ""}
-            </Typography>
-            <Grid container spacing={2} justifyContent={"space-evenly"} >
-            {boards.map((b, idx) => (
-                <Grid key={idx}>
-                <Typography variant="subtitle1">{mode === "1P" ? "Player" : `Player ${idx + 1}`}</Typography>
-                <GameBoard board={b} />
-                </Grid>
-            ))}
-            </Grid>
-        </>
-        )}
-    </Container>
+    <SectionComponent>
+      <h2 className="font-bold text-blue-600 text-2xl p-5 justify-center"
+      >Game Board Turn:{mode === "2P" ? ` -> ${playerTurn === 0 ? "P1" : "P2"}` : ""}</h2>
+      <CenterCardComponent id="board-card-1">
+                <MatrixOfSquareComponent 
+                matrix={ boards.length > 1 ? boards[1-playerTurn] : boards[0]}
+                handleMatrixCellHit={handleShoot}
+                ></MatrixOfSquareComponent>
+      </CenterCardComponent>
+    </SectionComponent>
   );
 }

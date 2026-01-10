@@ -1,7 +1,7 @@
 // purpose:
 // two inputs: number for size row * column, ships < size
 // button start/reset
-import "./ResizeComponent.css";
+// import "./ResizeComponent.css";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   LabelInputComponent,

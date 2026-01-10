@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../redux/hooks';
 import { OnePlayerGame, TwoPlayerGame } from '../services/games';
-// Import dialog actions from Redux
 import { 
     openWinDialog, 
     closeWinDialog, 
@@ -9,7 +8,6 @@ import {
     closeStatsDialog 
 } from '../redux/gameSlice';
 
-// Create the GameContext
 export const GameContext = createContext(null);
 
 export const GameProvider = ({ children }) => {
@@ -18,13 +16,16 @@ export const GameProvider = ({ children }) => {
 
   const [gameInstance, setGameInstance] = useState(null);
   const [playerTurn, setPlayerTurn] = useState(0); // 0 for Player1, 1 for Player2
-  const [boards, setBoards] = useState([]); // Array of boards to display
+  const [boards, setBoards] = useState([]);
   const [statusMessage, setStatusMessage] = useState(""); // Message displayed to the user
   const [winnerBoards, setWinnerBoards] = useState([]); // Boards to display in win dialog
   const [seenShots, setSeenShots] = useState([]); // To track shots already made in the current game
 
-  // Function to start a new game
+  useEffect(() => {
+    startGame();
+  }, [rows, mode])
   const startGame = () => {
+    console.log('Game mode', mode);
     let newGame;
     if (mode === "1P") {
       newGame = new OnePlayerGame("Player1", rows, cols);

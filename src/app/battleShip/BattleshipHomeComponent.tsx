@@ -85,7 +85,7 @@ export default function BattleshipHomeComponent() {
       <ResizeComponent resize={resetBMatrix} />
 
       <SectionComponent>
-        <CenterCardComponent id={"matrix_of_square_1"}>
+        <CenterCardComponent id="matrix_of_square_1">
           <MatrixOfSquareComponent
             matrix={matrix}
             handleMatrixCellHit={attack}
